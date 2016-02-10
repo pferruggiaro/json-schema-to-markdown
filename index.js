@@ -85,6 +85,8 @@ function generateSchemaSectionText(octothorpes, name, isRequired, schema, subSch
 		text.push(schema.oneOf.map(function(oneOf) {
 			return '* `' + subSchemas[oneOf['$ref']] + '`'
 		}).join('\n'))
+	} else if (schema['$ref']) {
+		text.push('references [' + schema['$ref'] + '](' + schema['$ref'] + '.md)')
 	}
 
 	var restrictions = generatePropertyRestrictions(schema)
@@ -118,6 +120,8 @@ function getActualType(schema, subSchemas) {
 		return schema.type
 	} else if (schema['$ref'] && subSchemas[schema['$ref']]) {
 		return subSchemas[schema['$ref']]
+	} else if (schema['$ref']) {
+		return '$ref'
 	} else if (schema.enum) {
 		return 'enum'
 	} else {
